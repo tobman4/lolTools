@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="R:\LOL_BOT_REBORN\LOL_BOT_REBORN\LCU\LCU.csproj" />
+    <ProjectReference Include="..\LCU\LCU.csproj" />
   </ItemGroup>
 
   <ItemGroup>

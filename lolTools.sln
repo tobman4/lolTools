@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCU", "LCU-test-repo\LCU.csproj", "{B7847F32-1D6A-436D-B85D-48B77AAA19BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCU", "LCU\LCU.csproj", "{B7847F32-1D6A-436D-B85D-48B77AAA19BF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lolTools", "lolTools\lolTools.csproj", "{33182077-8A05-4F42-8707-9314442F1074}"
 EndProject
