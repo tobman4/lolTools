@@ -1,0 +1,3 @@
+[submodule "LCU-test-repo"]
+	path = LCU-test-repo
+	url = git@github.com:tobman4/LCU-test-repo.git
