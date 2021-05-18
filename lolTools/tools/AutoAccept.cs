@@ -4,28 +4,40 @@ using System.Diagnostics;
 using LCU;
 
 namespace lolTools.tools {
-    public static class AutoAccept {
+    public class AutoAccept : toolBase {
 
-        public static ToolMode mode = ToolMode.enabled;
-        public static DateTime lastCall = DateTime.Now;
+        public AutoAccept() : base() {
+        }
 
+        //public ToolMode mode = ToolMode.enabled;
+        //public DateTime lastCall = DateTime.Now;
+        
+        /*
+        public void toggle(object sender, EventArgs e) {
+            mode = (mode == ToolMode.disabled ? ToolMode.enabled : ToolMode.disabled);
+            string status = (mode == ToolMode.disabled ? "Off" : "On");
+            flipStatus(sender);
+        }
+        */
+        protected override void init() {
+            base.init();
 
-        public static void run(object sender,toolStepArg data) {
+            mode = ToolMode.disabled;
 
-            if (!data.clientAPI ||
-                (DateTime.Now - lastCall).TotalSeconds < 5 ||
-                mode == ToolMode.disabled) {
+            addToStrip("Auto accept: off", toggle);
+        }
+
+        protected override void _run(ref bool didRun, toolStepArg arg) {
+
+            if (!arg.clientAPI ||
+                (DateTime.Now - lastRun).TotalSeconds < 5) {
                 return;
             }
 
-            lastCall = DateTime.Now;
-
             //gameFlowPhase phase = clientLCU.GetGamePhase();
-            if(data.phase == gameFlowPhase.ReadyCheck) {
+            if(arg.phase == gameFlowPhase.ReadyCheck) {
                 clientLCU.AcceptMatch();
-                if(mode == ToolMode.runOnce) {
-                    mode = ToolMode.disabled;
-                }
+                didRun = true;
             }
         }
     }

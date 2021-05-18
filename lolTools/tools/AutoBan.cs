@@ -5,16 +5,41 @@ using LCU;
 using LCU.Helper;
 using LCU.Champs;
 
+using lolTools;
 
 namespace lolTools.tools {
-    public static class AutoBan {
+    public class AutoBan : toolBase {
 
-        public static ToolMode mode = ToolMode.enabled;
-        public static DateTime lastCall = DateTime.Now;
+        //public static ToolMode mode = ToolMode.enabled;
+        //public static DateTime lastCall = DateTime.Now;
 
         private static Champion[] banList;
 
-        private static int getBan() {
+        public AutoBan() : base() {
+        }
+
+        protected override void init() {
+            base.init();
+
+            if(Save.hasKey("BanList")) {
+                Champion[] list = Save.readData<Champion[]>("BanList");
+                this.setBans(list);
+            }
+
+            mode = ToolMode.disabled;
+
+            addToStrip("Auto accept: off", toggle);
+
+        }
+
+        public Champion[] getCurrentList() {
+            if(banList == null) {
+                return null;
+            }
+            return (Champion[])banList.Clone();
+        }
+
+        private int getBan() {
             
             if(banList == null) {
                 return 63;
@@ -31,7 +56,8 @@ namespace lolTools.tools {
             return 63; // <--- Brand
         }
 
-        public static void setBans(Champion[] newList) {
+        public void setBans(Champion[] newList) {
+            Save.writeData("BanList",newList);
             if(newList.Length == 0) {
                 Debug.WriteLine("Cant set ban list to a list with zero champs. chane mode to turn it off");
                 return;
@@ -40,16 +66,14 @@ namespace lolTools.tools {
             }
         }
 
-        public static void run(object sender, toolStepArg data) {
-            if (data.champSession == null || mode == ToolMode.disabled) {
+        protected override void _run(ref bool didRun, toolStepArg arg) {
+            if (arg.champSession == null || mode == ToolMode.disabled) {
                 return;
-            } else if((DateTime.Now-lastCall).TotalMilliseconds < 250) {
+            } else if((DateTime.Now-lastRun).TotalMilliseconds < 250) {
                 return;
             }
 
-            lastCall = DateTime.Now;
-
-            Session s = data.champSession;
+            Session s = arg.champSession;
             LCU.Helper.Action a = s.getCurrent(true);
 
             if(a == null) {
@@ -61,11 +85,9 @@ namespace lolTools.tools {
                 patch.championId = getBan();
                 clientLCU.patchAction(patch);
 
-                if(mode == ToolMode.runOnce) {
-                    mode = ToolMode.disabled;
-                }
-
+                didRun = true;
             }
+
 
         }
     }
